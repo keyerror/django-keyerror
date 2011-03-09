@@ -23,6 +23,7 @@ class Error(dict):
             'synopsis': synopsis.strip()[:200],
             'traceback': simplejson.dumps(tb),
 
+            'type': 'django',
             'apps': simplejson.dumps(settings.INSTALLED_APPS),
             'exc_type': exc_type.__name__,
             'sys_path': simplejson.dumps(sys.path),
