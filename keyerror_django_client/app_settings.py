@@ -7,7 +7,7 @@ def get_setting(suffix, *args):
     return getattr(settings, '%s_%s' % (PREFIX, suffix), *args)
 
 URL = get_setting('URL', 'http://api.keyerror.com/v1/errors')
-TIMEOUT = get_setting('TIMEOUT', 2)
+TIMEOUT = get_setting('TIMEOUT', 1)
 
 try:
     ENABLED = get_setting('ENABLED')
