@@ -19,12 +19,13 @@ class Error(dict):
 
         self.update({
             'url': request.build_absolute_uri()[:200],
-            'apps': simplejson.dumps(settings.INSTALLED_APPS),
             'server': socket.gethostname()[:100],
-            'exc_type': exc_type.__name__,
-            'synopsis': synopsis.strip(),
-            'sys_path': simplejson.dumps(sys.path),
+            'synopsis': synopsis.strip()[:200],
             'traceback': simplejson.dumps(tb),
+
+            'apps': simplejson.dumps(settings.INSTALLED_APPS),
+            'exc_type': exc_type.__name__,
+            'sys_path': simplejson.dumps(sys.path),
         })
 
     def send(self):
