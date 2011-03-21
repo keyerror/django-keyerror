@@ -1,7 +1,7 @@
 keyerror.com Django client
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This is the Django client for the `KeyError <http://keyerror.com/>`_ error
+This is the Django client for the `KeyError <https://keyerror.com/>`_ error
 service.
 
 Installation
