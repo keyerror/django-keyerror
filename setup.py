@@ -4,5 +4,5 @@ from distutils.core import setup
 
 setup(
     name='KeyError.com Django client',
-    packages=('keyerror_django_client',),
+    packages=('django_keyerror',),
 )
