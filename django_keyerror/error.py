@@ -1,4 +1,5 @@
 import sys
+import json
 import urllib
 import socket
 import logging
@@ -6,7 +7,6 @@ import urllib2
 import traceback
 
 from django.conf import settings
-from django.utils import simplejson
 
 from . import app_settings
 
@@ -21,12 +21,12 @@ class Error(dict):
             'url': request.build_absolute_uri()[:200],
             'server': socket.gethostname()[:100],
             'synopsis': synopsis.strip()[:200],
-            'traceback': simplejson.dumps(tb),
+            'traceback': json.dumps(tb),
 
             'type': 'django',
-            'apps': simplejson.dumps(settings.INSTALLED_APPS),
+            'apps': json.dumps(settings.INSTALLED_APPS),
             'exc_type': exc_type.__name__,
-            'sys_path': simplejson.dumps(sys.path),
+            'sys_path': json.dumps(sys.path),
         })
 
     def send(self):

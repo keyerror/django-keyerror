@@ -1,7 +1,7 @@
 import time
+import json
 import socket
 
-from django.utils import simplejson
 from django.core.exceptions import MiddlewareNotUsed
 
 from . import app_settings
@@ -35,7 +35,7 @@ class KeyErrorMiddleware(object):
 
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-        sock.sendto(simplejson.dumps({
+        sock.sendto(json.dumps({
             'uri': request.path,
             'view': request._keyerror_view,
             'time': time_taken,
