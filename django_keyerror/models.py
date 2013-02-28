@@ -5,7 +5,7 @@ from django.http import Http404
 from django.core.signals import got_request_exception
 
 from . import app_settings
-from .error import Error
+from .error import DjangoError
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,7 @@ def report_exception(sender, request, **kwargs):
         return
 
     try:
-        Error(request, exc_type, exc_value, exc_traceback).send()
+        DjangoError(request, exc_type, exc_value, exc_traceback).send()
     except Exception:
         logger.exception("Exception whilst reporting error to keyerror.com")
 

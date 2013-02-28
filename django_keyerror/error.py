@@ -13,17 +13,15 @@ from . import app_settings
 logger = logging.getLogger(__name__)
 
 class Error(dict):
-    def __init__(self, request, exc_type, exc_value, exc_traceback):
+    def __init__(self, exc_type, exc_value, exc_traceback):
         tb = traceback.extract_tb(exc_traceback)
         synopsis = traceback.format_exception_only(exc_type, exc_value)[-1]
 
         self.update({
-            'url': request.build_absolute_uri()[:200],
             'server': socket.gethostname()[:100],
             'synopsis': synopsis.strip()[:200],
             'traceback': json.dumps(tb),
 
-            'type': 'django',
             'apps': json.dumps(settings.INSTALLED_APPS),
             'exc_type': exc_type.__name__,
             'sys_path': json.dumps(sys.path),
@@ -52,3 +50,20 @@ class Error(dict):
                 pass
 
             raise
+
+class DjangoError(Error):
+    def __init__(self, request, *args, **kwargs):
+        super(DjangoError, self).__init__(*args, **kwargs)
+
+        self.update({
+            'url': request.build_absolute_uri()[:200],
+            'type': 'django',
+        })
+
+class QueueError(Error):
+    def __init__(self, *args, **kwargs):
+        super(QueueError, self).__init__(*args, **kwargs)
+
+        self.update({
+            'type': 'queue',
+        })
