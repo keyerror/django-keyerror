@@ -15,7 +15,7 @@ def report_exception(sender, request, **kwargs):
 
     exc_type, exc_value, exc_traceback = sys.exc_info()
 
-    if isinstance(exc_type, Http404):
+    if isinstance(exc_type, (Http404, SystemExit)):
         return
 
     try:
