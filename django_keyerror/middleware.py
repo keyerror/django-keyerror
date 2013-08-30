@@ -1,10 +1,9 @@
 import time
-import json
-import socket
 
 from django.core.exceptions import MiddlewareNotUsed
 
 from . import app_settings
+from .utils import report_response
 
 class KeyErrorMiddleware(object):
     def __init__(self):
@@ -26,20 +25,14 @@ class KeyErrorMiddleware(object):
 
     def process_response(self, request, response):
         try:
-            view = request._keyerror_view
-            time_taken = time.time() - request._keyerror_start_time
+            report_response(
+                request.path,
+                request._keyerror_view,
+                time.time() - request._keyerror_start_time,
+            )
         except AttributeError:
             # If, for whatever reason, the variables are not available, don't
             # do anything else.
-            return response
-
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-        sock.sendto(json.dumps({
-            'uri': request.path,
-            'view': request._keyerror_view,
-            'time': time_taken,
-            'secret_key': app_settings.SECRET_KEY,
-        }), (app_settings.HOST, app_settings.PORT))
+            pass
 
         return response
