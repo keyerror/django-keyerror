@@ -1,3 +1,4 @@
+from django.core import mail
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
@@ -17,6 +18,10 @@ try:
 except AttributeError:
     # If we haven't overridden this, fallback to settings.DEBUG
     ENABLED = not settings.DEBUG
+
+# Always disble KeyError in a test environment
+if hasattr(mail, 'outbox'):
+    ENABLED = False
 
 try:
     SECRET_KEY = get_setting('SECRET_KEY')
