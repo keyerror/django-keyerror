@@ -10,7 +10,7 @@ URL = get_setting('URL', 'http://api.keyerror.com/v1/errors')
 TIMEOUT = get_setting('TIMEOUT', 1)
 
 HOST = get_setting('HOST', 'api.keyerror.com')
-PORT = get_setting('PORT', 2929)
+PORT = get_setting('PORT', 2930)
 
 try:
     ENABLED = get_setting('ENABLED')

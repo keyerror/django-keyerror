@@ -1,14 +1,32 @@
-import json
 import socket
+import struct
+import binascii
 
 from . import app_settings
 
-def report_response(uri, view, time_taken):
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+TYPE_PING, TYPE_RESPONSE = range(2)
 
-    sock.sendto(json.dumps({
-        'uri': uri,
-        'view': view,
-        'time': time_taken,
-        'secret_key': app_settings.SECRET_KEY,
-    }), (app_settings.HOST, app_settings.PORT))
+def ping():
+    _send(TYPE_PING)
+
+def report_response(uri, view, time_taken):
+    _send(TYPE_RESPONSE, 'I', time_taken, vargs=(uri, view))
+
+
+def _send(type_, fmt='', *args, **kwargs):
+    fmt = '!2sH20s%s' % fmt
+
+    args = [
+        'KE',
+        type_,
+        binascii.unhexlify(app_settings.SECRET_KEY),
+    ] + list(args)
+
+    for x in kwargs.pop('vargs', ()):
+        fmt += 'H%ds' % len(x)
+        args.extend((len(x), x))
+
+    socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(
+        struct.pack(fmt, *args),
+        (app_settings.HOST, app_settings.PORT),
+    )

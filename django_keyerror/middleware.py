@@ -28,7 +28,7 @@ class KeyErrorMiddleware(object):
             report_response(
                 request.path,
                 request._keyerror_view,
-                time.time() - request._keyerror_start_time,
+                (time.time() - request._keyerror_start_time) * 1000,
             )
         except AttributeError:
             # If, for whatever reason, the variables are not available, don't
