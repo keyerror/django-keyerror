@@ -23,6 +23,7 @@ def _send(type_, fmt='', *args, **kwargs):
     ] + list(args)
 
     for x in kwargs.pop('vargs', ()):
+        x = x.encode('utf-8')
         fmt += 'H%ds' % len(x)
         args.extend((len(x), x))
 
