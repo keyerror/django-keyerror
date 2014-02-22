@@ -28,9 +28,11 @@ class Error(dict):
         })
 
     def send(self):
-        logger.debug("Posting error to %s", app_settings.URL)
+        url = app_settings.URL % '/errors'
 
-        req = urllib2.Request(app_settings.URL, urllib.urlencode(self), {
+        logger.debug("Posting error to %s", url)
+
+        req = urllib2.Request(url, urllib.urlencode(self), {
             'X-API-Key': app_settings.SECRET_KEY,
         })
 

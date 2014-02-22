@@ -7,7 +7,7 @@ PREFIX = 'KEYERROR'
 def get_setting(suffix, *args):
     return getattr(settings, '%s_%s' % (PREFIX, suffix), *args)
 
-URL = get_setting('URL', 'http://api.keyerror.com/v1/errors')
+URL = get_setting('URL', 'http://api.keyerror.com/v1%s')
 TIMEOUT = get_setting('TIMEOUT', 1)
 
 HOST = get_setting('HOST', 'api.keyerror.com')
