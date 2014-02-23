@@ -60,6 +60,17 @@ class DjangoError(Error):
     def __init__(self, request, *args, **kwargs):
         super(DjangoError, self).__init__(*args, **kwargs)
 
+        self.update({
+            'url': request.build_absolute_uri()[:200],
+            'type': 'django',
+        })
+
+        try:
+            self['user'] = json.dumps(self.get_user(request))
+        except Exception:
+            pass
+
+    def get_user(self, request):
         # Don't depend on contrib.auth
         if hasattr(request, 'user') and request.user.is_authenticated():
             # Try and find default display name
@@ -77,19 +88,16 @@ class DjangoError(Error):
 
             # Allow app to override
             user.update(fn_user_info_callback(request))
-        elif hasattr(request, 'session'):
-            user = {
+
+            return user
+
+        if hasattr(request, 'session'):
+            return {
                 'identifier': request.session.session_key,
                 'is_authenticated': False,
             }
-        else:
-            user = {}
 
-        self.update({
-            'url': request.build_absolute_uri()[:200],
-            'type': 'django',
-            'user': json.dumps(user),
-        })
+        return user
 
 class QueueError(Error):
     def __init__(self, *args, **kwargs):
