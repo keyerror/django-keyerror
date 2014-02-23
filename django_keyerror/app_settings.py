@@ -10,6 +10,11 @@ def get_setting(suffix, *args):
 URL = get_setting('URL', 'http://api.keyerror.com/v1%s')
 TIMEOUT = get_setting('TIMEOUT', 1)
 
+USER_INFO_CALLBACK = get_setting(
+    'USER_INFO_CALLBACK',
+    'django_keyerror.utils.get_user_info',
+)
+
 HOST = get_setting('HOST', 'api.keyerror.com')
 PORT = get_setting('PORT', 2930)
 

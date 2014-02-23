@@ -9,8 +9,11 @@ import traceback
 from django.conf import settings
 
 from . import app_settings
+from .utils import from_dotted_path
 
 logger = logging.getLogger(__name__)
+
+fn_user_info_callback = from_dotted_path(app_settings.USER_INFO_CALLBACK)
 
 class Error(dict):
     def __init__(self, exc_type, exc_value, exc_traceback):
@@ -57,9 +60,35 @@ class DjangoError(Error):
     def __init__(self, request, *args, **kwargs):
         super(DjangoError, self).__init__(*args, **kwargs)
 
+        # Don't depend on contrib.auth
+        if hasattr(request, 'user') and request.user.is_authenticated():
+            # Try and find default display name
+            display = request.user.get_full_name().strip() or \
+                getattr(request.user, 'username', '')
+
+            # Set defaults
+            user = {
+                'url': '',
+                'display': display,
+                'avatar_url': '',
+                'identifier': str(request.user.id),
+                'is_authenticated': True,
+            }
+
+            # Allow app to override
+            user.update(fn_user_info_callback(request))
+        elif hasattr(request, 'session'):
+            user = {
+                'identifier': request.session.session_key,
+                'is_authenticated': False,
+            }
+        else:
+            user = {}
+
         self.update({
             'url': request.build_absolute_uri()[:200],
             'type': 'django',
+            'user': json.dumps(user),
         })
 
 class QueueError(Error):
