@@ -71,6 +71,8 @@ class DjangoError(Error):
             pass
 
     def get_user(self, request):
+        user = {}
+
         # Don't depend on contrib.auth
         if hasattr(request, 'user') and request.user.is_authenticated():
             # Try and find default display name
