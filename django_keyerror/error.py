@@ -93,7 +93,7 @@ class DjangoError(Error):
 
             return user
 
-        if hasattr(request, 'session'):
+        if hasattr(request, 'session') and request.session.session_key:
             return {
                 'identifier': request.session.session_key,
                 'is_authenticated': False,
