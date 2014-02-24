@@ -66,11 +66,11 @@ class DjangoError(Error):
         })
 
         try:
-            self['user'] = json.dumps(self.get_user(request))
+            self['user'] = json.dumps(self.get_user_info(request))
         except Exception:
             pass
 
-    def get_user(self, request):
+    def get_user_info(self, request):
         # Don't depend on contrib.auth
         if hasattr(request, 'user') and request.user.is_authenticated():
             # Try and find default display name
