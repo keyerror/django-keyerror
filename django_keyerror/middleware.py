@@ -33,6 +33,7 @@ class KeyErrorMiddleware(object):
         except AttributeError:
             # If, for whatever reason, the variables are not available, don't
             # do anything else.
+            print "****KEYERROR AttributeError*****"
             pass
 
         return response
