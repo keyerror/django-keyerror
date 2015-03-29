@@ -35,6 +35,6 @@ class KeyErrorMiddleware(object):
         except AttributeError:
             # If, for whatever reason, the variables are not available, don't
             # do anything else.
-            logger.error( "****KEYERROR AttributeError*****")
+            logger.exception( "****KEYERROR AttributeError*****")
 
         return response
