@@ -22,7 +22,7 @@ class Error(dict):
 
         self.update({
             'server': socket.gethostname()[:100],
-            'synopsis': synopsis.strip(),
+            'synopsis': synopsis.strip()[:200],
             'traceback': json.dumps(tb),
 
             'apps': json.dumps(settings.INSTALLED_APPS),
