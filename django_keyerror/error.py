@@ -22,7 +22,7 @@ class Error(dict):
 
         self.update({
             'server': socket.gethostname()[:100],
-            'synopsis': synopsis.strip()
+            'synopsis': synopsis.strip(),
             'traceback': json.dumps(tb),
 
             'apps': json.dumps(settings.INSTALLED_APPS),
@@ -61,7 +61,7 @@ class DjangoError(Error):
         super(DjangoError, self).__init__(*args, **kwargs)
 
         self.update({
-            'url': request.build_absolute_uri()
+            'url': request.build_absolute_uri(),
             'type': 'django',
         })
 
