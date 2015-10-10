@@ -7,7 +7,7 @@ setup(
     version='1',
     description='KeyError.com Django client',
 
-    url='https://chris-lamb.co.uk/projects/tickle-me-email',
+    url='https://keyerror.com/docs/django',
     author="Chris Lamb",
     author_email='chris@keyerror.com',
 
