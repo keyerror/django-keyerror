@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='django-keyerror',
-    version='0',
+    version='1',
     description='KeyError.com Django client',
 
     url='https://chris-lamb.co.uk/projects/tickle-me-email',
