@@ -52,7 +52,7 @@ class Error(dict):
                 # the response
                 e.msg = '%s - %s' % (e.msg, e.read().splitlines()[0])
             except IndexError:
-                pass
+                logger.exception("Exception whilst reporting error to keyerror.com")
 
             raise
 
@@ -61,14 +61,14 @@ class DjangoError(Error):
         super(DjangoError, self).__init__(*args, **kwargs)
 
         self.update({
-            'url': request.build_absolute_uri()[:200],
+            'url': request.build_absolute_uri(),
             'type': 'django',
         })
 
         try:
             self['user'] = json.dumps(self.get_user_info(request))
         except Exception:
-            pass
+            logger.exception("Exception whilst reporting error to keyerror.com")
 
     def get_user_info(self, request):
         # Don't depend on contrib.auth

@@ -1,9 +1,12 @@
 import time
+import logging
 
 from django.core.exceptions import MiddlewareNotUsed
 
 from . import app_settings
 from .utils import report_response
+
+logger = logging.getLogger(__name__)
 
 class KeyErrorMiddleware(object):
     def __init__(self):
@@ -33,6 +36,6 @@ class KeyErrorMiddleware(object):
         except AttributeError:
             # If, for whatever reason, the variables are not available, don't
             # do anything else.
-            pass
+            logger.exception("Exception whilst reporting error to keyerror.com")
 
         return response
