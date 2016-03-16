@@ -52,7 +52,7 @@ class Error(dict):
                 # the response
                 e.msg = '%s - %s' % (e.msg, e.read().splitlines()[0])
             except IndexError:
-                logger.exception("****IndexError****")
+                logger.exception("Exception whilst reporting error to keyerror.com")
 
             raise
 
@@ -68,7 +68,7 @@ class DjangoError(Error):
         try:
             self['user'] = json.dumps(self.get_user_info(request))
         except Exception:
-            logger.exception("**** DjangoError ******")
+            logger.exception("Exception whilst reporting error to keyerror.com")
 
     def get_user_info(self, request):
         # Don't depend on contrib.auth
