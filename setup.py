@@ -12,4 +12,8 @@ setup(
     author_email='chris@keyerror.com',
 
     packages=find_packages(),
+
+    install_requires=(
+        'Django>=1.8',
+    ),
 )
