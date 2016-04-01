@@ -28,14 +28,17 @@ class KeyErrorMiddleware(object):
 
     def process_response(self, request, response):
         try:
-            report_response(
-                request.path,
-                request._keyerror_view,
-                int((time.time() - request._keyerror_start_time) * 1000),
-            )
+            elapsed = int((time.time() - request._keyerror_start_time) * 1000)
+            view_name = request._keyerror_view
         except AttributeError:
             # If, for whatever reason, the variables are not available, don't
             # do anything else.
+            return response
+
+        try:
+            report_response(request.path, view_name, elapsed)
+        except:
+            # Log the exception but don't interrupt the request
             logger.exception("Exception whilst reporting error to keyerror.com")
 
         return response
