@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='django-keyerror',
-    version='2.1.2',
+    version='2.1.3',
     description='KeyError.com Django client',
 
     url='https://keyerror.com/docs/django',
