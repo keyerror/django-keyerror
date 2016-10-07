@@ -46,7 +46,7 @@ class Error(dict):
                 kwargs['timeout'] = app_settings.TIMEOUT
 
             urllib2.urlopen(req, **kwargs)
-        except urllib2.HTTPError, e:
+        except urllib2.HTTPError as e:
             try:
                 # We try and print a descriptive message on the first line of
                 # the response
