@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.signals import got_request_exception
 
 from . import app_settings
+from .utils import unwrap_exception
 from .error import DjangoError, QueueError
 
 logger = logging.getLogger(__name__)
@@ -16,13 +17,15 @@ def report_exception(sender, request, **kwargs):
     if not app_settings.ENABLED:
         return
 
-    exc_type, exc_value, exc_traceback = sys.exc_info()
+    exc_type, exc_value, exc_traceback, ident = \
+        unwrap_exception(*sys.exc_info())
 
+    # Ignore some errors
     if isinstance(exc_type, (Http404, SystemExit)):
         return
 
     try:
-        DjangoError(request, exc_type, exc_value, exc_traceback).send()
+        DjangoError(request, exc_type, exc_value, exc_traceback, ident).send()
     except Exception:
         logger.exception("Exception whilst reporting error to keyerror.com")
 
@@ -37,8 +40,11 @@ if 'djcelery' in settings.INSTALLED_APPS:
         if not app_settings.ENABLED:
             return
 
+        exc_type, exc_value, exc_traceback, ident = \
+            unwrap_exception(einfo.type, einfo.exception, traceback)
+
         try:
-            QueueError(einfo.type, einfo.exception, traceback).send()
+            QueueError(exc_type, exc_value, exc_traceback, ident).send()
         except Exception:
             logger.exception("Exception whilst reporting error to keyerror.com")
 

@@ -3,6 +3,7 @@ import struct
 import binascii
 
 from . import app_settings
+from .api import GroupErrorException
 
 TYPE_PING, TYPE_RESPONSE = range(2)
 
@@ -49,3 +50,19 @@ def from_dotted_path(fullpath):
 
 def get_user_info(request):
     return {}
+
+class WrappedException(Exception):
+    def __init__(self, ident, exc_info):
+        self.ident = ident
+        self.exc_info = exc_info
+
+        super(WrappedException, self).__init__()
+
+def unwrap_exception(exc_type, exc_value, exc_traceback):
+    # If we are grouping, extract the unique identifier and override the
+    # exception values themselves.
+    if isinstance(exc_type, WrappedException):
+        return exc_value.exc_info + (exc_value.ident,)
+
+    # ..otherwise just return whatever we were passed.
+    return exc_type, exc_value, exc_traceback, None
