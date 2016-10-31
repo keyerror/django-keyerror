@@ -1,0 +1,6 @@
+[run]
+branch = True
+source = django_keyerror
+
+[report]
+show_missing = true
