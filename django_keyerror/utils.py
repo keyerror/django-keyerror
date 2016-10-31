@@ -29,7 +29,7 @@ def _send(type_, fmt='', *args, **kwargs):
 
     datagram = struct.pack(fmt, *args)
 
-    if app_settings.ENABLED:
+    if app_settings.ENABLED: # praga: no-cover
         socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(
             datagram,
             (app_settings.HOST, app_settings.PORT),
@@ -54,9 +54,12 @@ def get_user_info(request):
     return {}
 
 class WrappedException(Exception):
-    def __init__(self, ident, exc_info):
+    def __init__(self, ident, exc_type, exc_value, exc_traceback):
         self.ident = ident
-        self.exc_info = exc_info
+
+        self.exc_type = exc_value
+        self.exc_value = exc_value
+        self.exc_traceback = exc_traceback
 
         super(WrappedException, self).__init__()
 
@@ -64,7 +67,8 @@ def unwrap_exception(exc_type, exc_value, exc_traceback):
     # If we are grouping, extract the unique identifier and override the
     # exception values themselves.
     if isinstance(exc_type, WrappedException):
-        return exc_value.exc_info + (exc_value.ident,)
+        exc_type, exc_value, exc_traceback, ident = \
+            exc_value.exc_type, exc_value.exc_value, exc_value.exc_traceback, exc_value.ident
 
     # ..otherwise just return whatever we were passed.
     return exc_type, exc_value, exc_traceback, None

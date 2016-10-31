@@ -28,7 +28,7 @@ class Command(BaseCommand):
         if not app_settings.ENABLED:
             raise CommandError("KeyError is not enabled; exiting.")
 
-        try:
+        try: # pragma: no cover
             urllib2.urlopen(req, timeout=5)
-        except urllib2.HTTPError, exc:
+        except urllib2.HTTPError, exc: # pragma: no cover
             raise CommandError("Error when notifying KeyError: %s" % exc)

@@ -16,4 +16,4 @@ def group_errors(ident):
     try:
         yield
     except Exception:
-        raise WrappedException(ident, sys.exc_info())
+        raise WrappedException(ident, *sys.exc_info())
