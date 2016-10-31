@@ -16,9 +16,6 @@ class Command(BaseCommand):
         parser.add_argument('url')
 
     def handle(self, *args, **options):
-        if not app_settings.ENABLED:
-            raise CommandError("KeyError is not enabled; exiting.")
-
         post_url = app_settings.URL % '/deployments'
 
         req = urllib2.Request(post_url, urllib.urlencode({
@@ -27,6 +24,9 @@ class Command(BaseCommand):
         }), {
             'X-API-Key': app_settings.SECRET_KEY,
         })
+
+        if not app_settings.ENABLED:
+            raise CommandError("KeyError is not enabled; exiting.")
 
         try:
             urllib2.urlopen(req, timeout=5)
