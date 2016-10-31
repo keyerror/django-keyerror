@@ -3,7 +3,6 @@ import struct
 import binascii
 
 from . import app_settings
-from .api import GroupErrorException
 
 TYPE_PING, TYPE_RESPONSE = range(2)
 
