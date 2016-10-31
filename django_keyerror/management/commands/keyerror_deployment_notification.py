@@ -3,7 +3,8 @@ import urllib2
 
 from django.core.management.base import BaseCommand, CommandError
 
-from ... import app_settings
+from ...app_settings import app_settings
+
 
 class Command(BaseCommand):
     help = "Notify KeyError of a new deployment."
