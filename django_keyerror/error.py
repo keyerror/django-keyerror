@@ -8,8 +8,8 @@ import traceback
 
 from django.conf import settings
 
-from . import app_settings
 from .utils import from_dotted_path
+from .app_settings import app_settings
 
 logger = logging.getLogger(__name__)
 

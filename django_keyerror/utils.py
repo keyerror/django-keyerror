@@ -2,7 +2,7 @@ import socket
 import struct
 import binascii
 
-from . import app_settings
+from .app_settings import app_settings
 
 TYPE_PING, TYPE_RESPONSE = range(2)
 

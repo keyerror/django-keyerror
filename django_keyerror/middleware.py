@@ -3,8 +3,8 @@ import logging
 
 from django.core.exceptions import MiddlewareNotUsed
 
-from . import app_settings
 from .utils import report_response
+from .app_settings import app_settings
 
 logger = logging.getLogger(__name__)
 

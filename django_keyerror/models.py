@@ -5,9 +5,9 @@ from django.http import Http404
 from django.conf import settings
 from django.core.signals import got_request_exception
 
-from . import app_settings
 from .utils import unwrap_exception
 from .error import DjangoError, QueueError
+from .app_settings import app_settings
 
 logger = logging.getLogger(__name__)
 

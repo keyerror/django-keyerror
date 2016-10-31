@@ -2,35 +2,48 @@ from django.core import mail
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
-PREFIX = 'KEYERROR'
+class NOT_PROVIDED:
+    pass
 
-def get_setting(suffix, *args):
-    return getattr(settings, '%s_%s' % (PREFIX, suffix), *args)
+def setting(suffix, default=NOT_PROVIDED):
+    # Lazily get settings from ``django.conf.settings`` instance so that the
+    # @override_settings works.
+    @property
+    def fn(self):
+        key = 'KEYERROR_%s' % suffix
 
-URL = get_setting('URL', 'http://api.keyerror.com/v1%s')
-TIMEOUT = get_setting('TIMEOUT', 1)
+        try:
+            if default is NOT_PROVIDED:
+                return getattr(settings, key)
+        except AttributeError:
+            raise ImproperlyConfigured(
+                "Missing required setting: {}".format(key),
+            )
 
-USER_INFO_CALLBACK = get_setting(
-    'USER_INFO_CALLBACK',
-    'django_keyerror.utils.get_user_info',
-)
+        return getattr(settings, key, default)
+    return fn
 
-HOST = get_setting('HOST', 'api.keyerror.com')
-PORT = get_setting('PORT', 2930)
-
-try:
-    ENABLED = get_setting('ENABLED')
-except AttributeError:
-    # If we haven't overridden this, fallback to settings.DEBUG
-    ENABLED = not settings.DEBUG
-
-# Always disble KeyError in a test environment
-if hasattr(mail, 'outbox'):
-    ENABLED = False
-
-try:
-    SECRET_KEY = get_setting('SECRET_KEY')
-except AttributeError:
-    raise ImproperlyConfigured(
-        "Missing required setting: %s_SECRET_KEY" % PREFIX
+class AppSettings(object):
+    SECRET_KEY = setting('SECRET_KEY')
+    USER_INFO_CALLBACK = setting(
+        'USER_INFO_CALLBACK',
+        'django_keyerror.utils.get_user_info',
     )
+
+    URL = setting('URL', 'http://api.keyerror.com/v1%s')
+    HOST = setting('HOST', 'api.keyerror.com')
+    PORT = setting('PORT', 2930)
+    TIMEOUT = setting('TIMEOUT', 1)
+
+    @property
+    def ENABLED(self):
+        if hasattr(mail, 'outbox'):
+            False
+
+        try:
+            return setting('ENABLED')
+        except ImproperlyConfigured:
+            # If we haven't overridden this, fallback to settings.DEBUG
+            return not settings.DEBUG
+
+app_settings = AppSettings()

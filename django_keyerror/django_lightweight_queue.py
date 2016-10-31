@@ -1,7 +1,7 @@
 from django.core.exceptions import MiddlewareNotUsed
 
-from . import app_settings
 from .error import QueueError
+from .app_settings import app_settings
 
 class KeyErrorMiddleware(object):
     def __init__(self):
