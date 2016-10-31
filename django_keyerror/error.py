@@ -13,7 +13,6 @@ from .app_settings import app_settings
 
 logger = logging.getLogger(__name__)
 
-fn_user_info_callback = from_dotted_path(app_settings.USER_INFO_CALLBACK)
 
 class Error(dict):
     def __init__(self, exc_type, exc_value, exc_traceback):
@@ -88,7 +87,8 @@ class DjangoError(Error):
             }
 
             # Allow app to override
-            user.update(fn_user_info_callback(request))
+            fn = from_dotted_path(app_settings.USER_INFO_CALLBACK)
+            user.update(fn(request))
 
             return user
 
