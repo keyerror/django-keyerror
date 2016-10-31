@@ -9,8 +9,8 @@ TYPE_PING, TYPE_RESPONSE = range(2)
 def ping():
     _send(TYPE_PING)
 
-def report_response(uri, view, time_taken):
-    _send(TYPE_RESPONSE, 'I', time_taken, vargs=(uri, view))
+def report_response(uri, view, elapsed_ms):
+    _send(TYPE_RESPONSE, 'I', elapsed_ms, vargs=(uri, view))
 
 
 def _send(type_, fmt='', *args, **kwargs):
