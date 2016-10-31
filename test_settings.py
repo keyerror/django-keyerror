@@ -26,4 +26,4 @@ LOGGING = {
     'loggers': {'': {'level': 'CRITICAL'}},
 }
 
-KEYERROR_SECRET_KEY = 'test'
+KEYERROR_SECRET_KEY = 'd4bacc4efc5a6c0ac389cca5574ea7ec7e8418dc'
