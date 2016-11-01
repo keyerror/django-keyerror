@@ -1,6 +1,5 @@
 INSTALLED_APPS = (
     'django.contrib.auth',
-    'django.contrib.admin',
     'django.contrib.contenttypes',
 
     'django_keyerror',
@@ -27,4 +26,5 @@ LOGGING = {
     'loggers': {'': {'level': 'CRITICAL'}},
 }
 
+KEYERROR_ENABLED = True
 KEYERROR_SECRET_KEY = 'd4bacc4efc5a6c0ac389cca5574ea7ec7e8418dc'

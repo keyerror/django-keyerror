@@ -29,11 +29,10 @@ def _send(type_, fmt='', *args, **kwargs):
 
     datagram = struct.pack(fmt, *args)
 
-    if app_settings.ENABLED: # praga: no-cover
-        socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(
-            datagram,
-            (app_settings.HOST, app_settings.PORT),
-        )
+    socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(
+        datagram,
+        (app_settings.HOST, app_settings.PORT),
+    )
 
 def from_dotted_path(fullpath):
     """

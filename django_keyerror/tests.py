@@ -1,4 +1,5 @@
 from django.test import TestCase, override_settings
+from django.urls import reverse
 from django.core.management import call_command, CommandError
 
 from . import utils
@@ -37,9 +38,12 @@ class SmokeTest(TestCase):
     def test_report_response(self):
         utils.report_response("https://example.org/", 'path.to.view', 100)
 
-    @override_settings(KEYERROR_ENABLED=True)
-    def test_middleware_enabled(self):
-        self.client.get('/')
+    def test_success(self):
+        self.client.get(reverse('success'))
 
-    def test_middleware(self):
-        self.client.get('/')
+    def test_not_found(self):
+        self.client.get(reverse('not-found'))
+
+    def test_error(self):
+        with self.assertRaises(ZeroDivisionError):
+            self.client.get(reverse('error'))
