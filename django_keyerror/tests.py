@@ -20,14 +20,10 @@ class SmokeTest(TestCase):
             with group_errors('name'):
                 1/0
 
-        exc_type, exc_value, exc_traceback, ident = utils.unwrap_exception(
-            exc.exception.exc_type,
-            exc.exception.exc_value,
-            exc.exception.exc_traceback,
-        )
+        exc_type, _, _ = exc.exception.exc_info
 
-        self.assert_(isinstance(exc_type, ZeroDivisionError))
-        self.assertEqual(ident, 'name')
+        self.assertEqual(exc_type, ZeroDivisionError)
+        self.assertEqual(exc.exception.ident, 'name')
 
     def test_smoke_test_django_lightweight_queue(self):
         from . import django_lightweight_queue

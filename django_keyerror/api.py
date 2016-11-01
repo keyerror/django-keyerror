@@ -3,6 +3,7 @@ import contextlib
 
 from .utils import WrappedException
 
+
 @contextlib.contextmanager
 def group_errors(ident):
     """
@@ -15,5 +16,5 @@ def group_errors(ident):
 
     try:
         yield
-    except Exception:
-        raise WrappedException(ident, *sys.exc_info())
+    except Exception as exc:
+        raise WrappedException(ident, sys.exc_info())

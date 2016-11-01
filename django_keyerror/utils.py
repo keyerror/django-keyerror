@@ -54,21 +54,20 @@ def get_user_info(request):
     return {}
 
 class WrappedException(Exception):
-    def __init__(self, ident, exc_type, exc_value, exc_traceback):
+    def __init__(self, ident, exc_info):
         self.ident = ident
-
-        self.exc_type = exc_value
-        self.exc_value = exc_value
-        self.exc_traceback = exc_traceback
+        self.exc_info = exc_info
 
         super(WrappedException, self).__init__()
 
 def unwrap_exception(exc_type, exc_value, exc_traceback):
+    ident = None
+
     # If we are grouping, extract the unique identifier and override the
     # exception values themselves.
-    if isinstance(exc_type, WrappedException):
-        exc_type, exc_value, exc_traceback, ident = \
-            exc_value.exc_type, exc_value.exc_value, exc_value.exc_traceback, exc_value.ident
+    if isinstance(exc_value, WrappedException):
+        ident = exc_value.ident
+        exc_type, exc_value, exc_traceback = exc_value.exc_info
 
     # ..otherwise just return whatever we were passed.
     return exc_type, exc_value, exc_traceback, None
