@@ -37,9 +37,9 @@ class SmokeTest(TestCase):
     def test_report_response(self):
         utils.report_response("https://example.org/", 'path.to.view', 100)
 
+    @override_settings(KEYERROR_ENABLED=True)
     def test_middleware_enabled(self):
         self.client.get('/')
 
-    @override_settings(KEYERROR_ENABLED=False)
-    def test_middleware_disabled(self):
+    def test_middleware(self):
         self.client.get('/')
