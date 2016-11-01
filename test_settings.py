@@ -13,9 +13,10 @@ DATABASES = {
     },
 }
 
-MIDDLEWARE = (
+MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_keyerror.middleware.KeyErrorMiddleware',
 )
 
 SECRET_KEY = 'test'

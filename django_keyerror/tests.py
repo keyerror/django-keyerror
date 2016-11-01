@@ -36,3 +36,6 @@ class SmokeTest(TestCase):
 
     def test_report_response(self):
         utils.report_response("https://example.org/", 'path.to.view', 100)
+
+    def test_middleware(self):
+        self.client.get('/')
