@@ -33,8 +33,13 @@ class SmokeTest(TestCase):
     def test_smoke_test_middleware(self):
         from django_keyerror import middleware
 
-    def test_ping(self):
+    @mock.patch('django_keyerror.utils.send_datagram')
+    def test_ping(self, mock_send_datagram):
         utils.ping()
+
+        mock_send_datagram.assert_called_with(
+            'KE\x00\x00\xd4\xba\xccN\xfcZl\n\xc3\x89\xcc\xa5WN\xa7\xec~\x84\x18\xdc',
+        )
 
     @mock.patch('django_keyerror.utils.send_datagram')
     def test_report_response(self, mock_send_datagram):
