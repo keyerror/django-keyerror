@@ -40,16 +40,14 @@ class Error(dict):
     def _send(self, url, data, headers):
         req = urllib2.Request(url, urllib.urlencode(data), headers)
 
-        if app_settings.IS_TEST:
-            return
-
         try:
             kwargs = {}
             # 'timeout' argument only supported in Python 2.6
             if sys.version_info >= (2, 6):
                 kwargs['timeout'] = app_settings.TIMEOUT
 
-            urllib2.urlopen(req, **kwargs)
+            if not app_settings.IS_TEST:
+                urllib2.urlopen(req, **kwargs)
         except urllib2.HTTPError as e:
             try:
                 # We try and print a descriptive message on the first line of
