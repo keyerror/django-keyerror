@@ -19,7 +19,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 SECRET_KEY = 'test'
-ROOT_URLCONF = 'test_urls'
+ROOT_URLCONF = 'tests.urls'
 
 LOGGING = {
     'version': 1,

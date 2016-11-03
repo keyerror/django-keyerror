@@ -2,10 +2,9 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.core.management import call_command, CommandError
 
-from . import utils
-
-from .api import group_errors
-from .app_settings import NOT_PROVIDED
+from django_keyerror import utils
+from django_keyerror.api import group_errors
+from django_keyerror.app_settings import NOT_PROVIDED
 
 class SmokeTest(TestCase):
     def test_keyerror_deployment_notification(self):
@@ -27,10 +26,10 @@ class SmokeTest(TestCase):
         self.assertEqual(exc.exception.ident, 'name')
 
     def test_smoke_test_django_lightweight_queue(self):
-        from . import django_lightweight_queue
+        from django_keyerror import django_lightweight_queue
 
     def test_smoke_test_middleware(self):
-        from . import middleware
+        from django_keyerror import middleware
 
     def test_ping(self):
         utils.ping()
