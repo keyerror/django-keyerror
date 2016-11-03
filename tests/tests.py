@@ -88,7 +88,7 @@ class SmokeTest(TestCase):
         )
 
     @mock.patch('django_keyerror.error.Error._send')
-    def test_error_groued(self, mock_send):
+    def test_error_grouped(self, mock_send):
         try:
             self.client.get(reverse('error-grouped'))
         except Exception:
