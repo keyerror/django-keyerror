@@ -47,10 +47,14 @@ class AppSettings(object):
             return getattr(settings, TEMPLATE % 'ENABLED')
         except AttributeError:
             # If we haven't overridden this, first check we aren't running tests
-            if hasattr(mail, 'outbox'):
+            if self.IS_TEST:
                 return False
 
             # .. then assume that if we are debugging, we don't want to run i
             return not settings.DEBUG  # pragma: no cover
+
+    @property
+    def IS_TEST(self):
+        return hasattr(mail, 'outbox')
 
 app_settings = AppSettings()

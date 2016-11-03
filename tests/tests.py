@@ -1,3 +1,5 @@
+import mock
+
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.core.management import call_command, CommandError
@@ -34,8 +36,15 @@ class SmokeTest(TestCase):
     def test_ping(self):
         utils.ping()
 
-    def test_report_response(self):
+    @mock.patch('django_keyerror.utils.send_datagram')
+    def test_report_response(self, mock_send_datagram):
         utils.report_response("https://example.org/", 'path.to.view', 100)
+
+        mock_send_datagram.assert_called_with(
+            'KE\x00\x01\xd4\xba\xccN\xfcZl\n\xc3\x89\xcc\xa5WN\xa7'
+            '\xec~\x84\x18\xdc\x00\x00\x00d\x00\x14'
+            'https://example.org/\x00\x0cpath.to.view'
+        )
 
     def test_success(self):
         self.client.get(reverse('success'))

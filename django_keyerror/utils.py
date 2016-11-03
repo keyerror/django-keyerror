@@ -7,13 +7,14 @@ from .app_settings import app_settings
 TYPE_PING, TYPE_RESPONSE = range(2)
 
 def ping():
-    _send(TYPE_PING)
+    send_datagram(format_datagram(TYPE_PING))
 
 def report_response(uri, view, elapsed_ms):
-    _send(TYPE_RESPONSE, 'I', elapsed_ms, vargs=(uri, view))
+    send_datagram(format_datagram(
+        TYPE_RESPONSE, 'I', elapsed_ms, vargs=(uri, view),
+    ))
 
-
-def _send(type_, fmt='', *args, **kwargs):
+def format_datagram(type_, fmt='', *args, **kwargs):
     fmt = '!2sH20s%s' % fmt
 
     args = [
@@ -27,7 +28,11 @@ def _send(type_, fmt='', *args, **kwargs):
         fmt += 'H%ds' % len(x)
         args.extend((len(x), x))
 
-    datagram = struct.pack(fmt, *args)
+    return struct.pack(fmt, *args)
+
+def send_datagram(datagram):
+    if app_settings.IS_TEST:
+        return
 
     socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(
         datagram,
