@@ -74,4 +74,4 @@ def unwrap_exception(exc_type, exc_value, exc_traceback):
         exc_type, exc_value, exc_traceback = exc_value.exc_info
 
     # ..otherwise just return whatever we were passed.
-    return exc_type, exc_value, exc_traceback, None
+    return exc_type, exc_value, exc_traceback, ident
