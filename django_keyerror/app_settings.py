@@ -51,7 +51,7 @@ class AppSettings(object):
                 return False
 
             # .. then assume that if we are debugging, we don't want to run i
-            return not settings.DEBUG  # pragma: no cover
+            return not settings.DEBUG
 
     @property
     def IS_TEST(self):

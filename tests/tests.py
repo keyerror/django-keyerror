@@ -45,6 +45,7 @@ class SmokeTest(TestCase):
     @override_settings()
     def test_fallback_enabled(self):
         del settings.KEYERROR_ENABLED
+
         self.failIf(app_settings.ENABLED)
 
     @mock.patch('django_keyerror.utils.send_datagram')
@@ -72,6 +73,11 @@ class SmokeTest(TestCase):
         self.client.get(reverse('not-found'))
 
     def test_smoke(self):
+        with self.assertRaises(ZeroDivisionError):
+            self.client.get(reverse('error'))
+
+    @override_settings(KEYERROR_ENABLED=False)
+    def test_smoke_disabled(self):
         with self.assertRaises(ZeroDivisionError):
             self.client.get(reverse('error'))
 
@@ -117,3 +123,8 @@ class SmokeTest(TestCase):
 
         self.assertEqual(data['ident'], 'ident')
         self.assertEqual(data['exc_type'], 'ZeroDivisionError')
+
+    @override_settings(KEYERROR_USER_INFO_CALLBACK='tests.user_info_callback')
+    def test_user_info(self):
+        with self.assertRaises(ZeroDivisionError):
+            self.client.get(reverse('error'))
