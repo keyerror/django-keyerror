@@ -57,6 +57,10 @@ class SmokeTest(TestCase):
     def test_not_found(self):
         self.client.get(reverse('not-found'))
 
+    def test_smoke(self):
+        with self.assertRaises(ZeroDivisionError):
+            self.client.get(reverse('error'))
+
     @mock.patch('django_keyerror.error.Error._send')
     def test_error(self, mock_send):
         with self.assertRaises(ZeroDivisionError):
