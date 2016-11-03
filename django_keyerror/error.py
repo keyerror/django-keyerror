@@ -34,9 +34,13 @@ class Error(dict):
 
         logger.debug("Posting error to %s", url)
 
-        req = urllib2.Request(url, urllib.urlencode(self), {
-            'X-API-Key': app_settings.SECRET_KEY,
-        })
+        self._send(url, self, {'X-API-Key': app_settings.SECRET_KEY})
+
+    def _send(self, url, data, headers):
+        req = urllib2.Request(url, urllib.urlencode(data), headers)
+
+        if app_settings.IS_TEST:
+            return
 
         try:
             kwargs = {}

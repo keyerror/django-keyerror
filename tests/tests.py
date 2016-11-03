@@ -57,6 +57,31 @@ class SmokeTest(TestCase):
     def test_not_found(self):
         self.client.get(reverse('not-found'))
 
-    def test_error(self):
+    @mock.patch('django_keyerror.error.Error._send')
+    def test_error(self, mock_send):
         with self.assertRaises(ZeroDivisionError):
             self.client.get(reverse('error'))
+
+        self.assertEqual(mock_send.call_count, 1)
+
+        url, data, headers = mock_send.call_args[0]
+
+        self.assertEqual(url, 'http://api.keyerror.com/v1/errors')
+
+        self.assertEqual(
+            data['synopsis'],
+            "ZeroDivisionError: integer division or modulo by zero",
+        )
+        self.assertEqual(data['url'], 'http://testserver/error')
+        self.assertEqual(data['user'], '{}')
+        self.assertEqual(data['type'], 'django')
+        self.assertEqual(data['exc_type'], 'ZeroDivisionError')
+
+        self.assert_('apps' in data)
+        self.assert_('sys_path' in data)
+        self.assert_('traceback' in data)
+
+        self.assertEqual(
+            headers['X-API-Key'],
+            'd4bacc4efc5a6c0ac389cca5574ea7ec7e8418dc',
+        )
