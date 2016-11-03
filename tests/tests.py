@@ -37,7 +37,7 @@ class SmokeTest(TestCase):
     def test_ping(self, mock_send_datagram):
         utils.ping()
 
-        mock_send_datagram.assert_called_with(
+        mock_send_datagram.assert_called_once_with(
             'KE\x00\x00\xd4\xba\xccN\xfcZl\n\xc3\x89\xcc\xa5WN\xa7\xec~\x84\x18\xdc',
         )
 
@@ -45,7 +45,7 @@ class SmokeTest(TestCase):
     def test_report_response(self, mock_send_datagram):
         utils.report_response("https://example.org/", 'path.to.view', 100)
 
-        mock_send_datagram.assert_called_with(
+        mock_send_datagram.assert_called_once_with(
             'KE\x00\x01\xd4\xba\xccN\xfcZl\n\xc3\x89\xcc\xa5WN\xa7'
             '\xec~\x84\x18\xdc\x00\x00\x00d\x00\x14'
             'https://example.org/\x00\x0cpath.to.view'
