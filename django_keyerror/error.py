@@ -32,9 +32,7 @@ class Error(dict):
 
     def send(self):
         url = app_settings.URL % '/errors'
-
         logger.debug("Posting error to %s", url)
-
         self._send(url, self, {'X-API-Key': app_settings.SECRET_KEY})
 
     def _send(self, url, data, headers):
