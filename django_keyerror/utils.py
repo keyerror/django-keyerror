@@ -34,10 +34,10 @@ def send_datagram(datagram):
     if app_settings.IS_TEST:
         return
 
-    socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(
-        datagram,
-        (app_settings.HOST, app_settings.PORT),
-    )
+    socket.socket( # pragma: no cover
+        socket.AF_INET,
+        socket.SOCK_DGRAM,
+    ).sendto(datagram, (app_settings.HOST, app_settings.PORT))
 
 def from_dotted_path(fullpath):
     """
