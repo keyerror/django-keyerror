@@ -9,4 +9,6 @@ urlpatterns = (
         name='not-found'),
     url(r'^error$', views.error,
         name='error'),
+    url(r'^error-grouped$', views.error_grouped,
+        name='error-grouped'),
 )

@@ -20,6 +20,7 @@ class Error(dict):
         synopsis = traceback.format_exception_only(exc_type, exc_value)[-1]
 
         self.update({
+            'ident': ident or '',
             'server': socket.gethostname()[:100],
             'synopsis': synopsis.strip()[:200],
             'traceback': json.dumps(tb),

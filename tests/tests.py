@@ -75,6 +75,7 @@ class SmokeTest(TestCase):
         self.assertEqual(data['url'], 'http://testserver/error')
         self.assertEqual(data['user'], '{}')
         self.assertEqual(data['type'], 'django')
+        self.assertEqual(data['ident'], '')
         self.assertEqual(data['exc_type'], 'ZeroDivisionError')
 
         self.assert_('apps' in data)
@@ -85,3 +86,16 @@ class SmokeTest(TestCase):
             headers['X-API-Key'],
             'd4bacc4efc5a6c0ac389cca5574ea7ec7e8418dc',
         )
+
+    @mock.patch('django_keyerror.error.Error._send')
+    def test_error_groued(self, mock_send):
+        try:
+            self.client.get(reverse('error-grouped'))
+        except Exception:
+            pass
+
+        self.assertEqual(mock_send.call_count, 1)
+        _, data, _ = mock_send.call_args[0]
+
+        self.assertEqual(data['ident'], 'ident')
+        self.assertEqual(data['exc_type'], 'ZeroDivisionError')
