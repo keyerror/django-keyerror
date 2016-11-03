@@ -2,11 +2,13 @@ import mock
 
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.core.management import call_command, CommandError
 
 from django_keyerror import utils
 from django_keyerror.api import group_errors
-from django_keyerror.app_settings import NOT_PROVIDED
+from django_keyerror.app_settings import app_settings
 
 class SmokeTest(TestCase):
     def test_keyerror_deployment_notification(self):
@@ -32,6 +34,13 @@ class SmokeTest(TestCase):
 
     def test_smoke_test_middleware(self):
         from django_keyerror import middleware
+
+    @override_settings()
+    def test_missing_settings(self):
+        del settings.KEYERROR_SECRET_KEY
+
+        with self.assertRaises(ImproperlyConfigured):
+            app_settings.SECRET_KEY
 
     @mock.patch('django_keyerror.utils.send_datagram')
     def test_ping(self, mock_send_datagram):
