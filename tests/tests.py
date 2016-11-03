@@ -42,6 +42,11 @@ class SmokeTest(TestCase):
         with self.assertRaises(ImproperlyConfigured):
             app_settings.SECRET_KEY
 
+    @override_settings()
+    def test_fallback_enabled(self):
+        del settings.KEYERROR_ENABLED
+        self.failIf(app_settings.ENABLED)
+
     @mock.patch('django_keyerror.utils.send_datagram')
     def test_ping(self, mock_send_datagram):
         utils.ping()
