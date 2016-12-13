@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class Error(dict):
-    def __init__(self, exc_type, exc_value, exc_traceback, ident):
+    def __init__(self, exc_type, exc_value, exc_traceback, ident=None):
         tb = traceback.extract_tb(exc_traceback)
         synopsis = traceback.format_exception_only(exc_type, exc_value)[-1]
 
