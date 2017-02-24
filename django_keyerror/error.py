@@ -7,8 +7,8 @@ import urllib2
 import traceback
 
 from django.conf import settings
+from django.utils.module_loading import import_string
 
-from .utils import from_dotted_path
 from .app_settings import app_settings
 
 logger = logging.getLogger(__name__)
@@ -83,7 +83,7 @@ class DjangoError(Error):
             }
 
             # Allow app to override
-            fn = from_dotted_path(app_settings.USER_INFO_CALLBACK)
+            fn = import_string(app_settings.USER_INFO_CALLBACK)
             user.update(fn(request))
 
             return user
