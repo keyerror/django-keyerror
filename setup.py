@@ -14,6 +14,6 @@ setup(
     packages=find_packages(),
 
     install_requires=(
-        'Django>=1.8',
+        'Django>=1.9',
     ),
 )
