@@ -1,4 +1,7 @@
+# -*- coding: utf-8 -*-
+
 import mock
+import sys
 
 from django.test import TestCase, override_settings
 from django.urls import reverse
@@ -7,6 +10,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.management import call_command, CommandError
 
 from django_keyerror import utils
+from django_keyerror.error import Error
 from django_keyerror.api import group_errors
 from django_keyerror.app_settings import app_settings
 
@@ -128,3 +132,17 @@ class SmokeTest(TestCase):
     def test_user_info(self):
         with self.assertRaises(ZeroDivisionError):
             self.client.get(reverse('error'))
+
+    def test_unicode_ident(self):
+        try:
+            1/0
+        except:
+            Error(*sys.exc_info(), ident=u'unicode-error-é').send()
+
+    def test_unicode_data(self):
+        try:
+            1/0
+        except:
+            error = Error(*sys.exc_info(), ident=None)
+            error['url'] = u'http://somewhere/unicode-error-é'
+            error.send()

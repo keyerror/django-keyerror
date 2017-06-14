@@ -10,6 +10,7 @@ from django.conf import settings
 from django.utils.module_loading import import_string
 
 from .app_settings import app_settings
+from . import utils
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +37,8 @@ class Error(dict):
         self._send(url, self, {'X-API-Key': app_settings.SECRET_KEY})
 
     def _send(self, url, data, headers):
-        req = urllib2.Request(url, urllib.urlencode(data), headers)
+        encoded_data = utils.unicode_encode_dict(data)
+        req = urllib2.Request(url, urllib.urlencode(encoded_data), headers)
 
         try:
             if not app_settings.IS_TEST:

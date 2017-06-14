@@ -60,3 +60,12 @@ def unwrap_exception(exc_type, exc_value, exc_traceback):
 
     # ..otherwise just return whatever we were passed.
     return exc_type, exc_value, exc_traceback, ident
+
+def unicode_encode_dict(data):
+    if hasattr(data, 'encode'):
+        return data.encode('utf-8')
+
+    if not isinstance(data, dict):
+        return data
+
+    return {k: unicode_encode_dict(v) for k, v in data.items()}
