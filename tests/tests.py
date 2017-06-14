@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import mock
 import sys
+import mock
 
+from django.conf import settings
 from django.test import TestCase, override_settings
 from django.urls import reverse
-from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.management import call_command, CommandError
 
@@ -13,6 +13,7 @@ from django_keyerror import utils
 from django_keyerror.error import Error
 from django_keyerror.api import group_errors
 from django_keyerror.app_settings import app_settings
+
 
 class SmokeTest(TestCase):
     def test_keyerror_deployment_notification(self):
@@ -35,9 +36,11 @@ class SmokeTest(TestCase):
 
     def test_smoke_test_django_lightweight_queue(self):
         from django_keyerror import django_lightweight_queue
+        django_lightweight_queue
 
     def test_smoke_test_middleware(self):
         from django_keyerror import middleware
+        middleware
 
     @override_settings()
     def test_missing_settings(self):

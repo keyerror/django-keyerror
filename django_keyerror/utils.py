@@ -6,13 +6,16 @@ from .app_settings import app_settings
 
 TYPE_PING, TYPE_RESPONSE = range(2)
 
+
 def ping():
     send_datagram(format_datagram(TYPE_PING))
+
 
 def report_response(uri, view, elapsed_ms):
     send_datagram(format_datagram(
         TYPE_RESPONSE, 'I', elapsed_ms, vargs=(uri, view),
     ))
+
 
 def format_datagram(type_, fmt='', *args, **kwargs):
     fmt = '!2sH20s%s' % fmt
@@ -30,17 +33,20 @@ def format_datagram(type_, fmt='', *args, **kwargs):
 
     return struct.pack(fmt, *args)
 
+
 def send_datagram(datagram):
     if app_settings.IS_TEST:
         return
 
-    socket.socket( # pragma: no cover
+    socket.socket(  # pragma: no cover
         socket.AF_INET,
         socket.SOCK_DGRAM,
     ).sendto(datagram, (app_settings.HOST, app_settings.PORT))
 
+
 def get_user_info(request):
     return {}
+
 
 class WrappedException(Exception):
     def __init__(self, ident, exc_info):
@@ -48,6 +54,7 @@ class WrappedException(Exception):
         self.exc_info = exc_info
 
         super(WrappedException, self).__init__()
+
 
 def unwrap_exception(exc_type, exc_value, exc_traceback):
     ident = None
@@ -60,6 +67,7 @@ def unwrap_exception(exc_type, exc_value, exc_traceback):
 
     # ..otherwise just return whatever we were passed.
     return exc_type, exc_value, exc_traceback, ident
+
 
 def unicode_encode_dict(data):
     if hasattr(data, 'encode'):

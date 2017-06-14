@@ -9,8 +9,8 @@ import traceback
 from django.conf import settings
 from django.utils.module_loading import import_string
 
-from .app_settings import app_settings
 from . import utils
+from .app_settings import app_settings
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ class Error(dict):
 
         try:
             if not app_settings.IS_TEST:
-                urllib2.urlopen(req, timeout=app_settings.TIMEOUT) # pragma: no cover
+                urllib2.urlopen(req, timeout=app_settings.TIMEOUT)  # pragma: no cover
         except urllib2.HTTPError as e:
             try:
                 # We try and print a descriptive message on the first line of
@@ -52,6 +52,7 @@ class Error(dict):
                 logger.exception("Exception whilst reporting error to keyerror.com")
 
             raise
+
 
 class DjangoError(Error):
     def __init__(self, request, *args, **kwargs):
@@ -97,6 +98,7 @@ class DjangoError(Error):
             }
 
         return {}
+
 
 class QueueError(Error):
     def __init__(self, *args, **kwargs):

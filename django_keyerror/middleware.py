@@ -31,14 +31,14 @@ class KeyErrorMiddleware(object):
         try:
             elapsed_ms = int((time.time() - request._keyerror_start_time) * 1000)
             view_name = request._keyerror_view
-        except AttributeError: # pragma: no cover
+        except AttributeError:  # pragma: no cover
             # If, for whatever reason, the variables are not available, don't
             # do anything else.
             return response
 
         try:
             report_response(request.path, view_name, elapsed_ms)
-        except: # pragma: no cover
+        except:  # pragma: no cover
             # Log the exception but don't interrupt the request
             logger.exception("Exception whilst reporting error to keyerror.com")
 
