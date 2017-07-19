@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import six
 import sys
 import mock
 
@@ -99,9 +100,13 @@ class SmokeTest(TestCase):
 
         self.assertEqual(url, 'http://api.keyerror.com/v1/errors')
 
+        message = "ZeroDivisionError: integer division or modulo by zero"
+        if six.PY3:
+            message = "ZeroDivisionError: division by zero"
+
         self.assertEqual(
             data['synopsis'],
-            "ZeroDivisionError: integer division or modulo by zero",
+            message,
         )
         self.assertEqual(data['url'], 'http://testserver/error')
         self.assertEqual(data['user'], '{}')
