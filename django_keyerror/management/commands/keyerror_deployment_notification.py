@@ -1,5 +1,4 @@
-import urllib
-import urllib2
+from six.moves import urllib
 
 from django.core.management.base import BaseCommand, CommandError
 
@@ -18,7 +17,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         post_url = app_settings.URL % '/deployments'
 
-        req = urllib2.Request(post_url, urllib.urlencode({
+        req = urllib.request.Request(post_url, urllib.parse.urlencode({
             'url': options['url'],
             'title': options['title'],
         }), {
@@ -29,6 +28,6 @@ class Command(BaseCommand):
             raise CommandError("KeyError is not enabled; exiting.")
 
         try: # pragma: no cover
-            urllib2.urlopen(req, timeout=5)
-        except urllib2.HTTPError, exc: # pragma: no cover
+            urllib.request.urlopen(req, timeout=5)
+        except urllib.error.HTTPError as exc: # pragma: no cover
             raise CommandError("Error when notifying KeyError: %s" % exc)

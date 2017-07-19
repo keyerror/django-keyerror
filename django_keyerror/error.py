@@ -1,10 +1,10 @@
 import sys
 import json
-import urllib
 import socket
 import logging
-import urllib2
 import traceback
+
+from six.moves import urllib
 
 from django.conf import settings
 from django.utils.module_loading import import_string
@@ -38,12 +38,12 @@ class Error(dict):
 
     def _send(self, url, data, headers):
         encoded_data = utils.unicode_encode_dict(data)
-        req = urllib2.Request(url, urllib.urlencode(encoded_data), headers)
+        req = urllib.request.Request(url, urllib.parse.urlencode(encoded_data), headers)
 
         try:
             if not app_settings.IS_TEST:
-                urllib2.urlopen(req, timeout=app_settings.TIMEOUT)  # pragma: no cover
-        except urllib2.HTTPError as e:
+                urllib.request.urlopen(req, timeout=app_settings.TIMEOUT) # pragma: no cover
+        except urllib.error.HTTPError as e:
             try:
                 # We try and print a descriptive message on the first line of
                 # the response
