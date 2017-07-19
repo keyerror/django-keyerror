@@ -24,7 +24,7 @@ class Error(dict):
             'ident': ident or '',
             'server': socket.gethostname()[:100],
             'synopsis': synopsis.strip()[:200],
-            'traceback': json.dumps(tb),
+            'traceback': json.dumps([list(x) for x in tb]),
 
             'apps': json.dumps(settings.INSTALLED_APPS),
             'exc_type': exc_type.__name__,
