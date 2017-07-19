@@ -31,10 +31,13 @@ class Error(dict):
             'sys_path': json.dumps(sys.path),
         })
 
+    def api_key(self):
+        return app_settings.SECRET_KEY
+
     def send(self):
         url = app_settings.URL % '/errors'
         logger.debug("Posting error to %s", url)
-        self._send(url, self, {'X-API-Key': app_settings.SECRET_KEY})
+        self._send(url, self, {'X-API-Key': self.api_key()})
 
     def _send(self, url, data, headers):
         encoded_data = utils.unicode_encode_dict(data)
