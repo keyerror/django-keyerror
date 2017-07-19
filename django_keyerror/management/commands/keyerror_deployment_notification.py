@@ -20,7 +20,7 @@ class Command(BaseCommand):
         req = urllib.request.Request(post_url, urllib.parse.urlencode({
             'url': options['url'],
             'title': options['title'],
-        }), {
+        }).encode('ascii'), {
             'X-API-Key': app_settings.SECRET_KEY,
         })
 

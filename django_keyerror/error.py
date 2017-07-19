@@ -38,7 +38,7 @@ class Error(dict):
 
     def _send(self, url, data, headers):
         encoded_data = utils.unicode_encode_dict(data)
-        req = urllib.request.Request(url, urllib.parse.urlencode(encoded_data), headers)
+        req = urllib.request.Request(url, urllib.parse.urlencode(encoded_data).encode('ascii'), headers)
 
         try:
             if not app_settings.IS_TEST:
