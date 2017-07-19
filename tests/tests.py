@@ -61,7 +61,7 @@ class SmokeTest(TestCase):
         utils.ping()
 
         mock_send_datagram.assert_called_once_with(
-            'KE\x00\x00\xd4\xba\xccN\xfcZl\n\xc3\x89\xcc\xa5WN\xa7\xec~\x84\x18\xdc',
+            b'KE\x00\x00\xd4\xba\xccN\xfcZl\n\xc3\x89\xcc\xa5WN\xa7\xec~\x84\x18\xdc',
         )
 
     @mock.patch('django_keyerror.utils.send_datagram')
@@ -69,9 +69,9 @@ class SmokeTest(TestCase):
         utils.report_response("https://example.org/", 'path.to.view', 100)
 
         mock_send_datagram.assert_called_once_with(
-            'KE\x00\x01\xd4\xba\xccN\xfcZl\n\xc3\x89\xcc\xa5WN\xa7'
-            '\xec~\x84\x18\xdc\x00\x00\x00d\x00\x14'
-            'https://example.org/\x00\x0cpath.to.view'
+            b'KE\x00\x01\xd4\xba\xccN\xfcZl\n\xc3\x89\xcc\xa5WN\xa7'
+            b'\xec~\x84\x18\xdc\x00\x00\x00d\x00\x14'
+            b'https://example.org/\x00\x0cpath.to.view'
         )
 
     def test_success(self):

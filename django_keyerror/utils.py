@@ -21,7 +21,7 @@ def format_datagram(type_, fmt='', *args, **kwargs):
     fmt = '!2sH20s%s' % fmt
 
     args = [
-        'KE',
+        b'KE',
         type_,
         binascii.unhexlify(app_settings.SECRET_KEY),
     ] + list(args)
