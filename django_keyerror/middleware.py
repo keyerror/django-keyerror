@@ -1,8 +1,14 @@
 import time
+import django
 import logging
 
 from .utils import report_response
 from .app_settings import app_settings
+
+if django.VERSION > (1, 10):
+    from django.utils.deprecation import MiddlewareMixin
+else:
+    MiddlewareMixin = object
 
 logger = logging.getLogger(__name__)
 
