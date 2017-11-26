@@ -11,7 +11,8 @@ from .app_settings import app_settings
 
 logger = logging.getLogger(__name__)
 
-## Django ####################################################################
+
+# Django #####################################################################
 
 def report_exception(sender, request, **kwargs):
     if not app_settings.ENABLED:
@@ -29,9 +30,11 @@ def report_exception(sender, request, **kwargs):
     except Exception:
         logger.exception("Exception whilst reporting error to keyerror.com")
 
+
 got_request_exception.connect(report_exception)
 
-## Celery ####################################################################
+
+# Celery #####################################################################
 
 if 'djcelery' in settings.INSTALLED_APPS:
     from celery import signals
@@ -46,6 +49,8 @@ if 'djcelery' in settings.INSTALLED_APPS:
         try:
             QueueError(exc_type, exc_value, exc_traceback, ident).send()
         except Exception:
-            logger.exception("Exception whilst reporting error to keyerror.com")
+            logger.exception(
+                "Exception whilst reporting error to keyerror.com"
+            )
 
     signals.task_failure.connect(report_task_failure)

@@ -41,18 +41,24 @@ class Error(dict):
 
     def _send(self, url, data, headers):
         encoded_data = utils.unicode_encode_dict(data)
-        req = urllib.request.Request(url, urllib.parse.urlencode(encoded_data).encode('ascii'), headers)
+        req = urllib.request.Request(
+            url,
+            urllib.parse.urlencode(encoded_data).encode('ascii'),
+            headers,
+        )
 
         try:
             if not app_settings.IS_TEST:
-                urllib.request.urlopen(req, timeout=app_settings.TIMEOUT) # pragma: no cover
+                urllib.request.urlopen(req, timeout=app_settings.TIMEOUT)  # pragma: no cover
         except urllib.error.HTTPError as e:
             try:
                 # We try and print a descriptive message on the first line of
                 # the response
                 e.msg = '%s - %s' % (e.msg, e.read().splitlines()[0])
             except IndexError:
-                logger.exception("Exception whilst reporting error to keyerror.com")
+                logger.exception(
+                    "Exception whilst reporting error to keyerror.com",
+                )
 
             raise
 
@@ -67,9 +73,13 @@ class DjangoError(Error):
         })
 
         try:
-            self['user'] = json.dumps(self.get_user_info(request))
+            self['user'] = json.dumps(
+                self.get_user_info(request)
+            )
         except Exception:
-            logger.exception("Exception whilst reporting error to keyerror.com")
+            logger.exception(
+                "Exception whilst reporting error to keyerror.com",
+            )
 
     def get_user_info(self, request):
         # Don't depend on contrib.auth

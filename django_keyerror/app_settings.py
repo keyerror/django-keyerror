@@ -4,8 +4,10 @@ from django.core.exceptions import ImproperlyConfigured
 
 TEMPLATE = 'KEYERROR_%s'
 
-class NOT_PROVIDED:
+
+class NOT_PROVIDED:  # noqa
     pass
+
 
 def setting(suffix, default=NOT_PROVIDED):
     # Lazily get settings from ``django.conf.settings`` instance so that the
@@ -26,6 +28,7 @@ def setting(suffix, default=NOT_PROVIDED):
 
     return fn
 
+
 class AppSettings(object):
     SECRET_KEY = setting('SECRET_KEY')
 
@@ -41,20 +44,22 @@ class AppSettings(object):
     PORT = setting('PORT', 2930)
 
     @property
-    def ENABLED(self):
+    def ENABLED(self):  # noqa
         # Always respect ENABLED if specified
         try:
             return getattr(settings, TEMPLATE % 'ENABLED')
         except AttributeError:
-            # If we haven't overridden this, first check we aren't running tests
+            # If we haven't overridden this, first check we aren't running
+            # tests
             if self.IS_TEST:
                 return False
 
-            # .. then assume that if we are debugging, we don't want to run i
+            # .. then assume that if we are debugging, we don't want to run
             return not settings.DEBUG
 
     @property
-    def IS_TEST(self):
+    def IS_TEST(self):  # noqa
         return hasattr(mail, 'outbox')
+
 
 app_settings = AppSettings()
