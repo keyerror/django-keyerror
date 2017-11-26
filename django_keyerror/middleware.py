@@ -13,7 +13,7 @@ else:
 logger = logging.getLogger(__name__)
 
 
-class KeyErrorMiddleware(object):
+class KeyErrorMiddleware(MiddlewareMixin):
     def process_view(self, request, callback, callback_args, callback_kwargs):
         if not app_settings.ENABLED:
             return
