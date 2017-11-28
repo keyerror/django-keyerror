@@ -83,7 +83,7 @@ class DjangoError(Error):
 
     def get_user_info(self, request):
         # Don't depend on contrib.auth
-        if hasattr(request, 'user') and request.user.is_authenticated():
+        if hasattr(request, 'user') and utils.is_authenticated(request.user):
             # Try and determine a reasonable default display name. We try not
             # rely on username existing - this field is often removed.
             display = request.user.get_full_name().strip() or \

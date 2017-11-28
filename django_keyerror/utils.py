@@ -1,3 +1,4 @@
+import django
 import socket
 import struct
 import binascii
@@ -77,3 +78,10 @@ def unicode_encode_dict(data):
         return data
 
     return {k: unicode_encode_dict(v) for k, v in data.items()}
+
+
+def is_authenticated(user):
+    if django.VERSION > (1, 10):
+        return user.is_authenticated
+
+    return user.is_authenticated()
