@@ -37,7 +37,7 @@ class AppSettings(object):
         'django_keyerror.utils.get_user_info',
     )
 
-    URL = setting('URL', 'http://api.keyerror.com/v1%s')
+    URL = setting('URL', 'https://api.keyerror.com/v1%s')
     TIMEOUT = setting('TIMEOUT', 1)
 
     HOST = setting('HOST', 'api.keyerror.com')

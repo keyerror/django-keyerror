@@ -98,7 +98,7 @@ class SmokeTest(TestCase):
 
         url, data, headers = mock_send.call_args[0]
 
-        self.assertEqual(url, 'http://api.keyerror.com/v1/errors')
+        self.assertEqual(url, 'https://api.keyerror.com/v1/errors')
 
         message = "ZeroDivisionError: integer division or modulo by zero"
         if six.PY3:
