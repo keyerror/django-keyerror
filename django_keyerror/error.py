@@ -20,6 +20,10 @@ class Error(dict):
         tb = traceback.extract_tb(exc_traceback)
         synopsis = traceback.format_exception_only(exc_type, exc_value)[-1]
 
+        cause = getattr(exc_value, '__cause__', None)
+        if cause is not None:
+            tb += traceback.extract_tb(cause.__traceback__)
+
         self.update({
             'ident': ident or '',
             'server': socket.gethostname()[:100],

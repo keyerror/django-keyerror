@@ -2,6 +2,7 @@
 
 import six
 import sys
+import json
 import mock
 
 from django.conf import settings
@@ -14,6 +15,10 @@ from django_keyerror import utils
 from django_keyerror.error import Error
 from django_keyerror.api import group_errors
 from django_keyerror.app_settings import app_settings
+
+
+if sys.version_info >= (3, 0, 0):
+    from .python_3_tests import Python3Test
 
 
 class SmokeTest(TestCase):
@@ -154,3 +159,35 @@ class SmokeTest(TestCase):
             error = Error(*sys.exc_info(), ident=None)
             error['url'] = u'http://somewhere/unicode-error-é'
             error.send()
+
+    @mock.patch('django_keyerror.error.Error._send')
+    def test_nested_traceback(self, mock_send):
+        def inner():
+            raise ValueError('inner')
+
+        def outer():
+            try:
+                inner()
+            except ValueError as e:
+                raise TypeError('outer')
+
+        try:
+            outer()
+        except Exception:
+            Error(*sys.exc_info()).send()
+
+        self.assertEqual(mock_send.call_count, 1)
+        _, data, _ = mock_send.call_args[0]
+        traceback = json.loads(data['traceback'])
+
+        self.assertNotIn(
+            [mock.ANY, mock.ANY, 'inner', mock.ANY],
+            traceback,
+            "Traceback should not contain inner function",
+        )
+
+        self.assertIn(
+            [mock.ANY, mock.ANY, 'outer', mock.ANY],
+            traceback,
+            "Traceback should contain outer function",
+        )
