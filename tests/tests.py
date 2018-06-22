@@ -17,7 +17,7 @@ from django_keyerror.api import group_errors
 from django_keyerror.app_settings import app_settings
 
 
-if sys.version_info >= (3, 0, 0):
+if six.PY3:
     from .python_3_tests import Python3Test
 
 
